@@ -1,3 +1,7 @@
+#!/usr/bin/env groovy
+
+@Library('Shared-Library@master') _ //master or whatever branch
+
 node{
    stage('SCM Checkout'){
        git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/vasantharajksks/Hello-Sprint-boot'
@@ -11,8 +15,10 @@ node{
      sh 'docker build -t my-app .'
    }
    
-    stage('Run Container on Server'){
-     sh 'docker run -p 8080:8080 -d --name my-app my-app'
-    }
+   stage ('Check logs') {
+    steps {
+       filterLogs ('WARNING', 5)
+     }
+   }
        
 }
